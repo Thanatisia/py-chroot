@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "py-chroot"
+version = "0.1.0"
+description = "A simple implementation of chroot made in python that starts up a REPL for traversing the chroot virtual environment"
+authors = [
+    { name="Thanatisia", email="55834101+Thanatisia@users.noreply.github.com" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    'Development Status :: 3 - Alpha',
+
+    # Indicate who your project is intended for
+    'Intended Audience :: Developers',
+    'Operating System :: OS Independent',
+
+    # Pick your license as you wish
+    'License :: OSI Approved :: MIT License',
+
+    # Specify the Python versions you support here.
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+]
+dependencies = [
+    # List your dependencies here
+]
+
+[project.scripts]
+# Program Entry Point(s) and scripts
+py-chroot = "pychroot.repl.main:main"
+
+[project.urls]
+Homepage = "https://github.com/Thanatisia/py-chroot"
+Repository = "https://github.com/Thanatisia/py-chroot.git"
+
+[tools.setuptools.packages.find]
+where = ["src"]
+
