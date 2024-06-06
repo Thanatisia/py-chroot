@@ -1,8 +1,19 @@
 # pychroot - Chroot implementation in python with TUI/REPL
 
 ## Information
+### Project
++ Project Name: py-chroot
++ Package Version: v0.1.0
+- Repository:
+    + GitHub: https://github.com/Thanatisia/py-chroot
+
 ### Description
 + A simple chroot CLI utility made in python that starts up a REPL for traversing the chroot
+
+### Motivation
+- I wanted to see if I could make a proper chroot interface/shell in Python as I knew how to do the fundamental workflow on their own (i.e. individual functions to chroot into the system, print and exit)
+    + The thought of making a cross-platform chroot utility came to mind, hence the project idea
+    + The more I wrote, I somehow ended up with a REPL and I guess a working (albeit incredibly lackluster) shell
 
 ## Setup
 ### Dependencies

@@ -40,3 +40,8 @@
     - Updated document 'FEATURES.md'
         + Added new TODO entry into the pipeline
 
+#### 1017H
+- Updates
+    - Updated document 'README.md'
+        + Added motivation and project information
+
