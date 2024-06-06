@@ -82,3 +82,21 @@
         + Implemented CLI argument parsing supported
         + Added optional arguments for customizing the root filesystem mount point and root directory using CLI arguments
 
+#### 2335H
++ Version: v0.2.0
+
+- Version Changes
+
+- New
+    - Added new directory 'resources' for project resources and files
+        - Added new directory 'demo' for project demo files
+            - Added new directory 'gifs' for project demo animation GIFs
+                + Added new GIF animation 'pychroot.gif'
+
+- Updates
+    - Updated document 'README.md'
+        + Updated package version to 'v0.2.0'
+        + Added demo animation GIF
+    - Updated the python package configuration file 'pyproject.toml'
+        + Updated package version to 'v0.2.0'
+

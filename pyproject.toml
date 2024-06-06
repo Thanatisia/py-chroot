@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py-chroot"
-version = "0.1.0"
+version = "0.2.0"
 description = "A simple implementation of chroot made in python that starts up a REPL for traversing the chroot virtual environment"
 authors = [
     { name="Thanatisia", email="55834101+Thanatisia@users.noreply.github.com" },
