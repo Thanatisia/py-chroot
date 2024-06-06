@@ -31,3 +31,7 @@
     - Updated entry point source code for the REPL 'main.py' in 'src/pychroot/repl/'
         + Refactor: Created new functions and refactored to make the code cleaner
 
+#### 1001H
+- New
+    + Added new document 'FEATURES.md' for all Features in the pipelines
+
