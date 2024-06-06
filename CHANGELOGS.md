@@ -25,3 +25,9 @@
             - Added new directory 'repl' : Contains the REPL source codes
                 + Added new file 'main.py'
 
+### 2024-06-06
+#### 0947H
+- Updates
+    - Updated entry point source code for the REPL 'main.py' in 'src/pychroot/repl/'
+        + Refactor: Created new functions and refactored to make the code cleaner
+

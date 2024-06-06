@@ -57,6 +57,33 @@ def init():
     sys_exec = exec_spl[1]
     sys_vers = "v0.1.0"
 
+def get_path_fd(path="/", flags=os.O_RDONLY, **kwargs):
+    """
+    Open a file descriptor to the specified path, the flags and the mode and return the file descriptor
+    """
+    fd = os.open(path, flags, **kwargs)
+    return fd
+
+def chroot_prepare(path="/"):
+    """
+    Prepare for the chroot by returning the file descriptor to the original root filesystem and the original working directory
+    """
+    # Get the file descriptor to the original root filesystem
+    real_root = get_path_fd(path, os.O_RDONLY)
+
+    # Get starting working directory
+    orig_dir = os.getcwd()
+
+    return [real_root, orig_dir]
+
+def chroot_exit(original_rootfs_fd, original_root_dir):
+    """
+    Exit the chroot virtual environment and revert back up to the original root filesystem and root directory
+    """
+    os.fchdir(original_rootfs_fd)
+    os.chroot(".")
+    os.chdir(original_root_dir)
+
 def chroot_enter(rootfs_mount_dir, root_dir):
     """
     chroot into the new rootfs directory
@@ -67,27 +94,15 @@ def chroot_enter(rootfs_mount_dir, root_dir):
     # Change root directory
     os.chdir(root_dir)
 
-def main():
-    # Perform pre-initialization setup
-    init()
-
+def start_repl(PROMPT="> ", rootfs_mount_dir=".", root_dir=os.getenv("HOME")):
     # Initialize Variables
     line = ""
-    PROMPT = "> "
-    rootfs_mount_dir = "/"
-    root_dir = str(os.getenv("HOME"))
 
-    # Get original root filesystem
-    real_root = os.open("/", os.O_RDONLY)
+    # Get the file descriptor to the original root filesystem and the starting working directory
+    real_root, orig_dir = chroot_prepare()
 
-    # Get starting working directory
-    orig_dir = os.getcwd()
-
-    # Change root filesystem
-    os.chroot(rootfs_mount_dir)
-
-    # Change root directory
-    os.chdir(root_dir)
+    # Change into the root filesystem and the new root directory
+    chroot_enter(rootfs_mount_dir, root_dir)
 
     # Perform main REPL program loop
     while (line != "exit") or (line != "quit"):
@@ -112,9 +127,7 @@ def main():
             case "exit" | "quit":
                 exit(0)
             case "exit-chroot":
-                os.fchdir(real_root)
-                os.chroot(".")
-                os.chdir(orig_dir)
+                chroot_exit(real_root, orig_dir)
             case "help":
                 display_help()
             case "version":
@@ -122,6 +135,13 @@ def main():
             case _:
                 # Default: command
                 rc:int = os.system(line)
+
+def main():
+    # Perform pre-initialization setup
+    init()
+
+    # Begin the REPL shell
+    start_repl()
 
 if __name__ == "__main__":
     main()
