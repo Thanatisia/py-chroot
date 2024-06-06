@@ -13,6 +13,7 @@ Documentation of all features suggested, planned/to be added, in development, in
     - Use cases:
         + if the native shell capabilities are insufficient for the task
         + Convenient built-in python support
++ [ ] CLI Argument parsing and optional arguments support
 
 ### Development
 - [ ] Cross-Platform support
