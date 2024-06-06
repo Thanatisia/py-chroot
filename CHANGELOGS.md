@@ -74,3 +74,11 @@
         - Implemented customizable REPL/shell prompt using 'eval()' to format strings including the use of built-in python source code
             + TODO: Identify alternatives for customizable prompts
 
+#### 2015H
+- Updates
+    - Updated document 'README.md'
+        + Updated parameters and options
+    - Updated entry point source code for the REPL 'main.py' in 'src/pychroot/repl/'
+        + Implemented CLI argument parsing supported
+        + Added optional arguments for customizing the root filesystem mount point and root directory using CLI arguments
+

@@ -30,12 +30,23 @@ py-chroot {options} <arguments>
 #### Positionals
 #### Optionals
 - With Arguments
+    - `-p | --prompt [custom-prompt]` : Specify the custom string you wish to set as your REPL/shell prompt
+        + Type: String
+        - Notes
+            + Ensure that you wrap your string with a single quote ('your-string') to ensure that none of the string gets executed on boot time
+        + Format: `-p '"your-string"'
+    - `-r | --root [root-directory]` : Specify the target root directory within the root filesystem to jump into
+        + Type: String
+    - `-m | --mount [rootfs-mount-path]` : Specify the target root filesystem mount path to chroot into
+        + Type: String
 - Flags
+    + -h | --help
+    + -v | --version
 
 ### Usage
-- Basic Chroot
+- Basic Chroot into a new root filesystem
     ```bash
-    py-chroot {-r|--root [root-mount-directory]}
+    py-chroot {-m|--mount [rootfs-mount-directory]} {-r|--root [root-directory]}
     ```
 
 ### Terminal UI (REPL) Key Commands

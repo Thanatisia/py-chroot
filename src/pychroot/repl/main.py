@@ -30,6 +30,19 @@ py-chroot <optionals> <arguments>
 ### Parameters
 - Positionals
 - Optionals
+    - With Arguments
+        - `-p | --prompt [custom-prompt]` : Specify the custom string you wish to set as your REPL/shell prompt
+            + Type: String
+            - Notes
+                + Ensure that you wrap your string with a single quote ('your-string') to ensure that none of the string gets executed on boot time
+            + Format: `-p '"your-string"'
+        - `-r | --root [root-directory]` : Specify the target root directory within the root filesystem to jump into
+            + Type: String
+        - `-m | --mount [rootfs-mount-path]` : Specify the target root filesystem mount path to chroot into
+            + Type: String
+    - Flags
+        + -h | --help
+        + -v | --version
 
 ### Usage
 - Initialize shell
@@ -57,7 +70,7 @@ System Version: {}
     print(msg)
 
 def init():
-    global argv, argc, sys_exec, sys_vers
+    global argv, argc, sys_exec, sys_vers, argparser
 
     # Retrieve CLI arguments parsed
     exec = sys.argv[0]
@@ -69,6 +82,13 @@ def init():
     # Declare and Initialize global variables
     sys_exec = exec_spl[1]
     sys_vers = "v0.1.0"
+    argparser = {
+        "positionals" : [],
+        "optionals" : {
+            "with-arguments" : {},
+            "flags" : {}
+        }
+    }
 
 def update_prompt(PROMPT):
     """
@@ -141,16 +161,141 @@ def start_repl(PROMPT_TEMPLATE="> ", rootfs_mount_dir=".", root_dir=os.getenv("H
         else:
             print("No commands provided.")
 
+def get_cli_arguments():
+    # Check if arguments are provided
+    if argc > 0:
+        # Initialize Variables
+        i = 0
+        # Open a while loop and iterate through all the arguments
+        while i < argc:
+            # Get current argument
+            curr_arg = argv[i]
+
+            # Match case conditions
+            match curr_arg:
+                ## Optionals
+                ### With Arguments
+                case "-p" | "--prompt":
+                    """
+                    Set the custom prompt for the REPL/shell
+                    """
+                    # Get next index
+                    next_idx = i+1
+
+                    # Check if next index contains any arguments
+                    if next_idx <= (argc-1):
+                        # Arguments found
+                        next_arg = argv[next_idx]
+
+                        # Data Validation: Null Value Check - Check if next argument is empty
+                        if next_arg != "":
+                            # Map the argument to the key
+                            argparser["optionals"]["with-arguments"]["prompt"] = next_arg
+
+                            # Increment counter to skip the next and go to the following element
+                            i += 1
+                case "-r" | "--root":
+                    """
+                    Set the target path to set as the root directory within the new root filesystem
+                    """
+                    # Get next index
+                    next_idx = i+1
+
+                    # Check if next index contains any arguments
+                    if next_idx <= (argc-1):
+                        # Arguments found
+                        next_arg = argv[next_idx]
+
+                        # Data Validation: Null Value Check - Check if next argument is empty
+                        if next_arg != "":
+                            # Map the argument to the key
+                            argparser["optionals"]["with-arguments"]["root-directory"] = next_arg
+
+                            # Increment counter to skip the next and go to the following element
+                            i += 1
+                case "-m" | "--mount":
+                    """ 
+                    Set the target root filesystem's mount path
+                    """
+                    # Get next index
+                    next_idx = i+1
+
+                    # Check if next index contains any arguments
+                    if next_idx <= (argc-1):
+                        # Arguments found
+                        next_arg = argv[next_idx]
+
+                        # Data Validation: Null Value Check - Check if next argument is empty
+                        if next_arg != "":
+                            # Map the argument to the key
+                            argparser["optionals"]["with-arguments"]["rootfs-mount-directory"] = next_arg
+
+                            # Increment counter to skip the next and go to the following element
+                            i += 1
+                ### Flags
+                case "-h" | "--help":
+                    # Enable flag to Display help message
+                    argparser["optionals"]["flags"]["help"] = True
+                case "-v" | "--version":
+                    # Enable flag to Display system version
+                    argparser["optionals"]["flags"]["version"] = True
+                case _:
+                    # Default argument - positional
+                    argparser["positionals"].append(curr_arg)
+
+            # Increment the index counter by 1
+            i += 1
+    else:
+        print("No arguments provided.")
+        exit(1)
+
 def main():
     # Perform pre-initialization setup
     init()
 
     # Initialize Variables
     PROMPT = '"{}|{}|> ".format(host_platform, os.getcwd())'
+    rootfs_mount_dir = "/"
+    root_dir = "../"
+
+    # Obtain parsed CLI arguments
+    get_cli_arguments()
+    positionals = argparser["positionals"]
+    optionals = argparser["optionals"]
+    opt_with_Arguments = optionals["with-arguments"]
+    opt_Flags = optionals["flags"]
+
+    # Process parsed CLI arguments
+    ## Process optional arguments
+    for opt_category, opt_values in optionals.items():
+        # Get current optional type and optional dictionary values
+        for opt_vals_key, opt_vals_val in opt_values.items():
+            # Get current key and current value
+            match opt_vals_key:
+                case "prompt":
+                    ## Set the custom prompt for the REPL/shell
+                    PROMPT = opt_vals_val
+                case "root-directory":
+                    ## Set the target path to set as the root directory within the new root filesystem
+                    root_dir = opt_vals_val
+                case "rootfs-mount-directory":
+                    ## Set the target root filesystem's mount path
+                    rootfs_mount_dir = opt_vals_val
+                case "help":
+                    ## Enable flag to Display help message
+                    display_help()
+                    exit(0)
+                case "version":
+                    # Enable flag to Display system version
+                    display_system_version()
+                    exit(0)
+                case opt_vals_key if not (opt_vals_key in list(opt_values.keys())):
+                    ## Default:: If current option is not in the list of keys
+                    print("Invalid optional provided in category [{}]: {}={}".format(opt_category, opt_vals_key, opt_vals_val))
 
     try:
         # Begin the REPL shell
-        start_repl(PROMPT_TEMPLATE=PROMPT, rootfs_mount_dir="/", root_dir="../")
+        start_repl(PROMPT_TEMPLATE=PROMPT, rootfs_mount_dir=rootfs_mount_dir, root_dir=root_dir)
     except PermissionError as perm_err:
         # Permission denied
         print(perm_err)
