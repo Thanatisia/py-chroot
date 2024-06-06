@@ -2,6 +2,7 @@
 
 ## Table of Contents
 + [2024-06-05](#2024-06-05)
++ [2024-06-06](#2024-06-06)
 
 ## Entries
 
@@ -44,4 +45,26 @@
 - Updates
     - Updated document 'README.md'
         + Added motivation and project information
+
+#### 1654H
+- New
+    - Added new directory 'core' in 'src/pychroot/' for containing modules/libraries related to the chroot core functionalities
+        - Added new directory 'chroot/' for module/libraries involving chroot functions
+            - Added new directory 'linux/' for Linux-specific functionalities
+                + Added new module 'chroot.py'
+            - Added new directory 'windows/' for Windows-specific functionalities
+                + Added new module 'chroot.py'
+    - Added new directory 'utils' in 'src/pychroot' for generic utilities that will be used by the package
+        - Added new module/library directory 'io/' containing modules/libraries related to Input/Output (IO) Processing and Handling operations
+            + Added new module 'files.py' related to File-related I/O Processing and Handling
+        - Added new module/library directory 'system/' containing modules/libraries related to the Operating System/Platform
+            + Added new module 'platform.py' : Wrapper/helper library that is built on top of the 'platform' module
+- Updates
+    - Updated entry point source code for the REPL 'main.py' in 'src/pychroot/repl/'
+        + Separated functions to related modules for customizability and modularity
+        + Added platform checking for cross-platform compatibility
+        + Added baseline for command history
+        + Added data validation: Null Value check
+        + Added PROMPT customization (WIP)
+        + REPL/shell infrastructure working
 
