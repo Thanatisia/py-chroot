@@ -68,3 +68,9 @@
         + Added PROMPT customization (WIP)
         + REPL/shell infrastructure working
 
+#### 1730H
+- Updates
+    - Updated entry point source code for the REPL 'main.py' in 'src/pychroot/repl/'
+        - Implemented customizable REPL/shell prompt using 'eval()' to format strings including the use of built-in python source code
+            + TODO: Identify alternatives for customizable prompts
+

@@ -70,7 +70,27 @@ def init():
     sys_exec = exec_spl[1]
     sys_vers = "v0.1.0"
 
-def start_repl(PROMPT="> ", rootfs_mount_dir=".", root_dir=os.getenv("HOME")):
+def update_prompt(PROMPT):
+    """
+    Take in a custom string you wish to set as your REPL/shell prompt, evaluate into a python string and return to the loop
+    - Notes
+        + Because this uses eval(), this uses python string syntax/formatting, and can accept python code on top of regular string
+        + However, Security is paramount and as such, I will be looking for alternatives
+
+    :: Params
+    - PROMPT : Specify the custom string you wish to set as your REPL/shell prompt
+        + Type: String
+
+    :: Output/Return
+    - eval : Return the evaluated/executed string into a python string object to display in the while loop
+        + Type: String
+    """
+    return eval('{}'.format(PROMPT))
+
+def start_repl(PROMPT_TEMPLATE="> ", rootfs_mount_dir=".", root_dir=os.getenv("HOME")):
+    """
+    Start the REPL/shell and take user input
+    """
     # Initialize Variables
     line = ""
     command_history = [] # Command history list for input persistency
@@ -81,6 +101,9 @@ def start_repl(PROMPT="> ", rootfs_mount_dir=".", root_dir=os.getenv("HOME")):
 
     # Perform main REPL program loop
     while (line != "exit") or (line != "quit"):
+        # Initialize a new prompt using the unevaluated prompt template string
+        PROMPT = update_prompt(PROMPT_TEMPLATE)
+
         # Print prompt and get user input
         line = input(PROMPT)
 
@@ -123,11 +146,11 @@ def main():
     init()
 
     # Initialize Variables
-    PROMPT = "{}|{}|> ".format(host_platform, os.getcwd())
+    PROMPT = '"{}|{}|> ".format(host_platform, os.getcwd())'
 
     try:
         # Begin the REPL shell
-        start_repl(PROMPT=PROMPT, rootfs_mount_dir="/", root_dir="../")
+        start_repl(PROMPT_TEMPLATE=PROMPT, rootfs_mount_dir="/", root_dir="../")
     except PermissionError as perm_err:
         # Permission denied
         print(perm_err)
